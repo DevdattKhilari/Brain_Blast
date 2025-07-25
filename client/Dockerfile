@@ -1,32 +1,30 @@
-# Step 1: Build Stage
+# Step 1: Build stage
 FROM node:18-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy only the package files to install dependencies
-# COPY package*.json ./
-
-# Install dependencies
+# Copy package files and install dependencies
+COPY package*.json ./
 RUN npm install
 
-# Copy all project files
+# Copy rest of the app source code
 COPY . .
 
-# Build the project (for production)
+# Build the CRA app
 RUN npm run build
 
-# Step 2: Serve with Nginx
+# Step 2: Serve build with Nginx
 FROM nginx:alpine
 
-# Remove default nginx static content
+# Remove default static files from nginx
 RUN rm -rf /usr/share/nginx/html/*
 
-# Copy the build output to Nginx's root directory
-COPY --from=builder /app/dist /usr/share/nginx/html
+# Copy build output from previous stage
+COPY --from=builder /app/build /usr/share/nginx/html
 
-# Expose port 80 for the container
+# Copy custom Nginx config if needed (optional)
+# COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 80
 
-# Run Nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
