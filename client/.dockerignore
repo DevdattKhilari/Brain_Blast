@@ -1,9 +1,18 @@
-
+# Ignore node modules
 node_modules
+
+# Ignore build output (will be re-created)
 dist
 build
+
+# Git and environment files
 .git
-.env
+.gitignore
+.dockerignore
 Dockerfile
+.env
+
+# OS/system files
+.DS_Store
 .vscode
-README.md
+*.log
