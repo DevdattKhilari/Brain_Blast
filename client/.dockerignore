@@ -1,1 +1,9 @@
 
+node_modules
+dist
+build
+.git
+.env
+Dockerfile
+.vscode
+README.md
